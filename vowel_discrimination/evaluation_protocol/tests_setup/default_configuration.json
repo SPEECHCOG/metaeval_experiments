@@ -1,0 +1,16 @@
+{
+ "input_features_path": "../../../../Corpora_Info/Isolated_Vowels_Corpus/input_features.h5",
+ "corpus_info_path": "../../../../Corpora_Info/Isolated_Vowels_Corpus/corpus_info.pickle",
+ "predictions_path": "../../../../Predictions/Isolated_Vowels_Corpus/random_predictions.h5",
+ "corpus": "ivc",
+ "dtw_distances_csv_files": {
+  "mfcc": "../../../../Statistical_Info/Isolated_Vowels_Corpus/dtw_distances_mfcc_ivc_native.csv",
+  "apc": "../../../../Statistical_Info/Isolated_Vowels_Corpus/dtw_distances_apc_ivc_native.csv",
+  "cpc": "../../../../Statistical_Info/Isolated_Vowels_Corpus/dtw_distances_cpc_ivc_native.csv",
+  "random": "../../../../Statistical_Info/Isolated_Vowels_Corpus/dtw_distances_random_ivc_native.csv",
+  "ortho": "../../../../Statistical_Info/Isolated_Vowels_Corpus/dtw_distances_ortho_ivc_native.csv"
+ },
+ "output_csv_path": "../../../../Statistical_Info/Isolated_Vowels_Corpus/statistics_random_native.csv",
+ "type": "basic",
+ "feature_types": ["random"]
+}

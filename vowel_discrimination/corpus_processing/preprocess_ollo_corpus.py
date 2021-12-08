@@ -150,7 +150,7 @@ if __name__ == '__main__':
                                                  'OLLO corpus. '
                                                  '\nUsage: python preprocess_hillenbrands_corpus.py '
                                                  '--corpus_path path_OLLO_corpus '
-                                                 '__audios_zip_path path_zip_with_trials '
+                                                 '--audios_zip_path path_zip_with_trials '
                                                  '--output_path path_corpus_info_file ')
 
     parser.add_argument('--corpus_path', type=str, required=True)

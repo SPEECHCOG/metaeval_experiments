@@ -109,8 +109,64 @@ You can download wav files and corpus_info binary file from
 
 Once you have all the corpora, the input data for models and corpora
 information files can be created. The procedures are similar for both
-experiments. 
+experiments. Activate the conda environment before executing python
+scripts.
 
+### IDS Preference
+
+Create input data for models
+
+```
+cd ids_preference
+python trial_processing/create_input_features.py --trials_path path_wav_files_trials --output_path path_h5py_output_file
+
+```
+
+### Vowel Discrimination
+
+First create corpora information files and then create the input 
+features for models. 
+
+Note: IVC corpus_info.pickle is available in the corpus repository.
+
+```
+cd vowel_discrimination
+```
+
+#### Hillenbrand's corpus
+
+1. Create corpus_info.pickle file 
+
+```
+python corpus_processing/preprocess_hillenbrands_corpus.py --corpus_path path_main_folder_corpus --output_path path_corpus_info_file
+```
+
+2. Create input features for model
+
+```
+python corpus_processing/create_input_features.py --corpus hc --audio_path path_zip_or_folder_with_audio_files --output_path path_h5py_output_file --corpus_info_path path_to_corpus_info 
+```
+
+#### OLLO corpus
+
+1. Create corpus_info.pickle file
+
+```
+python corpus_processing/preprocess_hillenbrands_corpus.py -corpus_path path_main_folder_corpus --audios_zip_path path_zip_with_trials --output_path path_corpus_info_file
+```
+
+2. Create input features for model
+
+```
+python corpus_processing/create_input_features.py --corpus oc --audio_path path_zip_or_folder_with_audio_files --output_path path_h5py_output_file --corpus_info_path path_to_corpus_info 
+```
+
+#### IVC corpus
+1. Create input features for model
+
+```
+python corpus_processing/create_input_features.py --corpus ivc --audio_path path_zip_or_folder_with_audio_files --output_path path_h5py_output_file
+```
 
 # Models
 

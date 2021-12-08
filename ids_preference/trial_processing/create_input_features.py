@@ -31,7 +31,7 @@ if __name__ == '__main__':
     parser.add_argument('--output_path', type=str, required=True)
     parser.add_argument('--cmvn', dest='cmvn', action='store_true')
     parser.add_argument('--no-cmvn', dest='cmvn', action='store_false')
-    parser.set_defaults(cmvn=True)
+    parser.set_defaults(cmvn=False)
 
     args = parser.parse_args()
 

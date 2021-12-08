@@ -96,7 +96,7 @@ if __name__ == '__main__':
     parser.add_argument('--listeners_failed', dest='listeners_failed', action='store_true')
     parser.add_argument('--no-listeners_failed', dest='listeners_failed', action='store_false')
 
-    parser.set_defaults(cmvn=True, listeners_failed=False)
+    parser.set_defaults(cmvn=False, listeners_failed=False)
 
     args = parser.parse_args()
 

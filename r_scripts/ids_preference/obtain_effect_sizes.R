@@ -69,10 +69,10 @@ cpc_100 = if (cpc_d$'p-value' <= significant_p) 's.' else 'n.s.'
 
 # ES comparison with infants' ES
 labels_significance = c('n.s.'="", 's.'="*")
-es_data <- data.frame(d = c(apc_d$d, cpc_d$d, 0.35),
+es_data <- data.frame(d = c(apc_d$d, cpc_d$d, 0.43),
                       source = c('APC', 'CPC', 'Infants'),
-                      lb = c(NA, NA, 0.29),
-                      ub = c(NA, NA, 0.42),
+                      lb = c(NA, NA, 0.33),
+                      ub = c(NA, NA, 0.53),
                       significance = factor(c(apc_100, cpc_100, 's.'), labels=labels_significance))
 lb_infants = es_data[es_data$source=='Infants']$lb
 

@@ -169,12 +169,78 @@ python corpus_processing/create_input_features.py --corpus ivc --audio_path path
 ```
 
 # Models
+We trained Autoregressive Predictive Coding (APC) and Contrastive
+Predictive Coding (CPC) models with 
+(LibriSpeech)[https://www.openslr.org/12/] 100 hours subset. 
+Trained models and untrained models can be found in `models`
 
+Code to train models can be found on 
+(PC models)[https://github.com/SPEECHCOG/pc_models_analysis].
+
+## Predictions for Vowel Discrimination
+For the vowel discrimination test, you will need to calculate the 
+encoded stimulus representations before calculating the distance between
+any pair of trials.
+
+To obtain the prediction files execute:
+
+```
+cd vowel_discrimiantion
+python pc_predictions_calculation/calculate_pc_predictions.py --input_features_path path_input_features_file --output_path path_h5py_predictions_file --model_path path_pc_model_file --pc_model [apc|cpc]
+```
+
+# Run tests
+Once you have input features, models and predictions 
+(for vowel discrimination), you can calculate the dependent variables
+according to each test. 
+
+## Obtain dependent variables
+### IDS Preference
+By executing the next command you will get the csv files with the 
+attentional preference score per frame and trials that will later be
+use to calculate the effect size.
+
+```
+cd ids_preference
+python pc_attentional_score_calculation/obtain_attentional_scores.py --model_path h5py_path --input_path path_to_h5py_input_features --output_csv_path path_output_csv_file --model_type [apc|cpc]
+```
+
+### Vowel Discrimination
+Similarly, for the vowel discrimination you will need to create the 
+csv files with the DTW distances per contrast.
+
+For that you need to provide the details of input features, predictions,
+corpus information file and details of output file paths, and type 
+of test (basic or basic_non_native). Please follow the example file 
+`vowel_discrimination/evaluation_protocol/tests_setups/default_configuration.json`.
+
+
+```
+cd vowel_discrimination
+python evaluation_protocol/tests_setups/python test_vowel_discrimination.py --config path_json_config_file
+
+```
+
+## Obtain effect sizes
+To obtain the effect sizes, you will need to run the R scripts. We 
+recommend the use of (RStudio)[https://www.rstudio.com/] for this section. 
+
+You can replicate the results of the manuscript by employing the csv 
+files already available in the folder `Model_Results`
+in `r_scripts/<test>/Model_Results`. Alternatively you can copy the 
+csv files previously generate in that folder. 
+
+You are ready to run the scripts to obtain the effect sizes and plots
+as in the manuscript. For the IDS preference test: 
+`r_scripts/ids_preference/obtain_effect_sizes.R`and for the vowel
+discrimination test: `r_scripts/vowel_discrimination/obtain_effect_sizes.R`
 
 
 # Citing this work
 
-
+María Andrea Cruz Blandón, Alejandrina Cristia, Okko Räsänen. 
+Evaluation of computational models of infant language development 
+against robust empirical data from meta-analyses: what, why, and how?
 
 # References
 
@@ -193,7 +259,9 @@ Human phoneme recognition depending on speech-intrinsic variability.
 J Acoust Soc Am. 2010 Nov;128(5):3126-41. doi: 10.1121/1.3493450. 
 PMID: 21110608.
 
-
 # Contact 
-report an issue
-email
+If you find any issu please report it on the 
+(issues section)[https://github.com/SPEECHCOG/metaeval_experiments/issues] 
+in this repository. Further comments can be sent to 
+maria <dot> cruzblandon <at> tuni <dot> fi
+

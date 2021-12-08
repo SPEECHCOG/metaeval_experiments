@@ -40,28 +40,102 @@ You can download stimuli from the
 utterances selected available on 
 (https://osf.io/ua3yh/)[https://osf.io/ua3yh/]. 
 
-Save the stimuli in the following folder structure for further analyses
+Save the stimuli using a folder structure like the example below.
 
 
 ```
-	.
-    |
-    ├── IDS                      
-    │   ├── utterance1.wav      
-    │   ├── ...         
-    │   └── utterancen.wav      
-    └── ADS                      
-        ├── utterance1.wav      
-        ├── ...         
-        └── utterancen.wav
+.
+|
+├── IDS                      
+│   ├── utterance1.wav      
+│   ├── ...         
+│   └── utteranceN.wav      
+└── ADS                      
+	├── utterance1.wav      
+	├── ...         
+	└── utteranceN.wav
 ```
 
 ## Vowel Discrimination
+The vowel discrimination task utilises three corpora for the vowel 
+contrasts: Hillenbrand's corpus, OLLO corpus and isolated vowel corpus 
+(IVC). 
 
+In order to run the experiment, you will need to download 
+all three. 
+
+### Hillenbrand's Corpus
+
+This corpus consists of /hVd/ contexts for 12 American English vowels. 
+In the experiment is used for native vowel contrasts.
+
+The original dataset can be downloaded from 
+(http://homepages.wmich.edu/~hillenbr/voweldata.html)
+[http://homepages.wmich.edu/~hillenbr/voweldata.html]
+
+For preprocessing you will need meta-data files and wav files.
+
+### OLLO Corpus
+
+This corpus consists of simple non-sense CVC and VCV contexts spoken by:
+     *  40 German
+     *  10 French
+    Where each logatome is spoken in six different styles:
+     *  Load speaking effort
+     *  Soft speaking effort
+     *  Fast speaking rate
+     *  Slow speaking rate
+     *  Rising pitch (question)
+     *  Normal
+
+This corpus was employed for non-native vowel contrasts.
+
+For the experiments you will need to download a subset of this corpus,
+(OLLO2.0_NO.ZIP)[http://medi.uni-oldenburg.de/ollo/html/download.html] 
+and the meta-data: OLLO2.0_README.ZIP and OLLO2.0_LABELS.ZIP, also 
+available in the previous link.
+
+### Isolate Vowel Corpus
+This corpus contains isolated vowels synthesised with (MBROLA voices)
+[https://github.com/numediart/MBROLA-voices].
+
+It includes vowels from Dutch, French, German and Japanese (non-native
+vowel contrasts) and English (native vowel contrasts).
+
+You can download wav files and corpus_info binary file from 
+(IVC repository)[]
+
+## Preprocessing
+
+Once you have all the corpora, the input data for models and corpora
+information files can be created. The procedures are similar for both
+experiments. 
 
 
 # Models
-link to code used to trained models
+
+
+
+# Citing this work
+
+
+
+# References
+
+The ManyBabies Consortium. (2020). Quantifying sources of variability 
+in infancy research using the infant-directed speech preference. 
+Advances in Methods and Practices in Psychological Science (AMPPS), 
+3(1), 24-52. DOI: 10.1177/2515245919900809
+
+James Hillenbrand, Laura A. Getty, Michael J. Clark, and Kimberlee 
+Wheeler , "Acoustic characteristics of American English vowels", The 
+Journal of the Acoustical Society of America 97, 3099-3111 (1995) 
+https://doi.org/10.1121/1.411872
+
+Meyer BT, Jürgens T, Wesker T, Brand T, Kollmeier B. 
+Human phoneme recognition depending on speech-intrinsic variability. 
+J Acoust Soc Am. 2010 Nov;128(5):3126-41. doi: 10.1121/1.3493450. 
+PMID: 21110608.
 
 
 # Contact 

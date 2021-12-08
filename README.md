@@ -33,12 +33,12 @@ for each test.
 
 ## IDS Preference
 The stimuli employed for this test correspond to the utterances recorded
-in the (ManyBabies experiment)[https://manybabies.github.io/]
+in the [ManyBabies experiment](https://manybabies.github.io/)
 
 You can download stimuli from the 
 (ManyBabies1 repository)[https://osf.io/re95x/]. List of ADS and IDS 
 utterances selected available on 
-(https://osf.io/ua3yh/)[https://osf.io/ua3yh/]. 
+[https://osf.io/ua3yh/](https://osf.io/ua3yh/).
 
 Save the stimuli using a folder structure like the example below.
 
@@ -70,8 +70,7 @@ This corpus consists of /hVd/ contexts for 12 American English vowels.
 In the experiment is used for native vowel contrasts.
 
 The original dataset can be downloaded from 
-(http://homepages.wmich.edu/~hillenbr/voweldata.html)
-[http://homepages.wmich.edu/~hillenbr/voweldata.html]
+[http://homepages.wmich.edu/~hillenbr/voweldata.html](http://homepages.wmich.edu/~hillenbr/voweldata.html)
 
 For preprocessing you will need meta-data files and wav files.
 
@@ -91,19 +90,19 @@ This corpus consists of simple non-sense CVC and VCV contexts spoken by:
 This corpus was employed for non-native vowel contrasts.
 
 For the experiments you will need to download a subset of this corpus,
-(OLLO2.0_NO.ZIP)[http://medi.uni-oldenburg.de/ollo/html/download.html] 
+[OLLO2.0_NO.ZIP](http://medi.uni-oldenburg.de/ollo/html/download.html) 
 and the meta-data: OLLO2.0_README.ZIP and OLLO2.0_LABELS.ZIP, also 
 available in the previous link.
 
 ### Isolate Vowel Corpus
-This corpus contains isolated vowels synthesised with (MBROLA voices)
-[https://github.com/numediart/MBROLA-voices].
+This corpus contains isolated vowels synthesised with 
+[MBROLA voices](https://github.com/numediart/MBROLA-voices).
 
 It includes vowels from Dutch, French, German and Japanese (non-native
 vowel contrasts) and English (native vowel contrasts).
 
 You can download wav files and corpus_info binary file from 
-(IVC repository)[]
+[IVC repository](https://github.com/SPEECHCOG/isolated_vowels_corpus)
 
 ## Preprocessing
 
@@ -171,11 +170,11 @@ python corpus_processing/create_input_features.py --corpus ivc --audio_path path
 # Models
 We trained Autoregressive Predictive Coding (APC) and Contrastive
 Predictive Coding (CPC) models with 
-(LibriSpeech)[https://www.openslr.org/12/] 100 hours subset. 
+[LibriSpeech](https://www.openslr.org/12/) 100 hours subset. 
 Trained models and untrained models can be found in `models`
 
 Code to train models can be found on 
-(PC models)[https://github.com/SPEECHCOG/pc_models_analysis].
+[PC models](https://github.com/SPEECHCOG/pc_models_analysis).
 
 ## Predictions for Vowel Discrimination
 For the vowel discrimination test, you will need to calculate the 
@@ -223,7 +222,7 @@ python evaluation_protocol/tests_setups/python test_vowel_discrimination.py --co
 
 ## Obtain effect sizes
 To obtain the effect sizes, you will need to run the R scripts. We 
-recommend the use of (RStudio)[https://www.rstudio.com/] for this section. 
+recommend the use of [RStudio](https://www.rstudio.com/) for this section. 
 
 You can replicate the results of the manuscript by employing the csv 
 files already available in the folder `Model_Results`
@@ -261,7 +260,7 @@ PMID: 21110608.
 
 # Contact 
 If you find any issu please report it on the 
-(issues section)[https://github.com/SPEECHCOG/metaeval_experiments/issues] 
+[issues section](https://github.com/SPEECHCOG/metaeval_experiments/issues) 
 in this repository. Further comments can be sent to 
-maria <dot> cruzblandon <at> tuni <dot> fi
+`maria <dot> cruzblandon <at> tuni <dot> fi`
 

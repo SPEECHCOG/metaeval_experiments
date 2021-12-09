@@ -131,6 +131,7 @@ get_es_plot <- function(es_data, lb_infants){
     #Give y-axis a meaningful label
     xlab('Source') +
     ylab('Effect size') +
+    ylim(0, 2.5) +
     #Add a vertical dashed line indicating an effect size of zero, for reference
     geom_hline(yintercept=lb_infants, color='red', linetype='dashed') + 
     # Red region: umcompatible region

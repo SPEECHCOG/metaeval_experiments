@@ -259,7 +259,7 @@ J Acoust Soc Am. 2010 Nov;128(5):3126-41. doi: 10.1121/1.3493450.
 PMID: 21110608.
 
 # Contact 
-If you find any issu please report it on the 
+If you find any issue please report it on the 
 [issues section](https://github.com/SPEECHCOG/metaeval_experiments/issues) 
 in this repository. Further comments can be sent to 
 `maria <dot> cruzblandon <at> tuni <dot> fi`

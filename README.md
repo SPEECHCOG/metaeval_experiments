@@ -151,7 +151,7 @@ python corpus_processing/create_input_features.py --corpus hc --audio_path path_
 1. Create corpus_info.pickle file
 
 ```
-python corpus_processing/preprocess_hillenbrands_corpus.py -corpus_path path_main_folder_corpus --audios_zip_path path_zip_with_trials --output_path path_corpus_info_file
+python corpus_processing/preprocess_ollo_corpus.py -corpus_path path_main_folder_corpus --audios_zip_path path_zip_with_trials --output_path path_corpus_info_file
 ```
 
 2. Create input features for model

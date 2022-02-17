@@ -216,7 +216,7 @@ of test (basic or basic_non_native). Please follow the example file
 
 ```
 cd vowel_discrimination
-python evaluation_protocol/tests_setups/python test_vowel_discrimination.py --config path_json_config_file
+python evaluation_protocol/tests_setups/test_vowel_discrimination.py --config path_json_config_file
 
 ```
 

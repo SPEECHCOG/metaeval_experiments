@@ -22,10 +22,10 @@ from evaluation_protocol.tests_setup.extract_vowel_segments import extract_vowel
 
 def _calculate_dtw(matrix1: np.ndarray, matrix2: np.ndarray, dist_method: Optional[str] = 'cosine') -> float:
     # Avoid non-definition of distance for zero vectors, replace those vectors with random representation
-    zero_frames = np.where(np.sum(matrix1, axis=1) == 0)
+    zero_frames = np.where(np.sum(matrix1, axis=1) == 0)[0]
     matrix1[zero_frames, :] = np.random.rand(len(zero_frames), matrix1.shape[-1])
 
-    zero_frames2 = np.where(np.sum(matrix2, axis=1) == 0)
+    zero_frames2 = np.where(np.sum(matrix2, axis=1) == 0)[0]
     matrix2[zero_frames2, :] = np.random.rand(len(zero_frames2), matrix2.shape[-1])
 
     alignment = dtw(matrix1, matrix2, keep_internals=True, distance_only=True, dist_method=dist_method)

@@ -151,7 +151,7 @@ python corpus_processing/create_input_features.py --corpus hc --audio_path path_
 1. Create corpus_info.pickle file
 
 ```
-python corpus_processing/preprocess_hillenbrands_corpus.py -corpus_path path_main_folder_corpus --audios_zip_path path_zip_with_trials --output_path path_corpus_info_file
+python corpus_processing/preprocess_ollo_corpus.py -corpus_path path_main_folder_corpus --audios_zip_path path_zip_with_trials --output_path path_corpus_info_file
 ```
 
 2. Create input features for model
@@ -216,7 +216,7 @@ of test (basic or basic_non_native). Please follow the example file
 
 ```
 cd vowel_discrimination
-python evaluation_protocol/tests_setups/python test_vowel_discrimination.py --config path_json_config_file
+python evaluation_protocol/tests_setups/test_vowel_discrimination.py --config path_json_config_file
 
 ```
 
@@ -259,7 +259,7 @@ J Acoust Soc Am. 2010 Nov;128(5):3126-41. doi: 10.1121/1.3493450.
 PMID: 21110608.
 
 # Contact 
-If you find any issu please report it on the 
+If you find any issue please report it on the 
 [issues section](https://github.com/SPEECHCOG/metaeval_experiments/issues) 
 in this repository. Further comments can be sent to 
 `maria <dot> cruzblandon <at> tuni <dot> fi`

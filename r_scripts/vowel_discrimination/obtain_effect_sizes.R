@@ -4,6 +4,7 @@
 
 library(tidyverse)
 library(ggplot2)
+library(metafor)
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
@@ -12,15 +13,6 @@ get_condition_mean <- function(measurements){
     group_by(contrast, language, condition) %>%
     summarise(mean = mean(distance, na.rm = TRUE),
               sd = sd(distance, na.rm = TRUE),
-              n = n())
-  return(mean_per_condition)
-}
-
-get_condition_mean_all <- function(measurements){
-  mean_per_condition <- measurements %>%
-    group_by(condition) %>%
-    summarise(mean = mean(distance, na.rm=TRUE), 
-              sd = sd(distance, na.rm=TRUE),
               n = n())
   return(mean_per_condition)
 }
@@ -37,24 +29,6 @@ get_t_statistics <- function(contrast_measurements){
       return(t_test)
     }
   )
-}
-
-calculate_standardised_mean_gain_all <- function(dtw_distances1_path, dtw_distances2_path){
-  measurements1 <- read.csv(dtw_distances1_path, sep=';')
-  measurements2 <- read.csv(dtw_distances2_path, sep=';')
-  measurements <- rbind(measurements1, measurements2)
-  
-  conditions_statistics <- get_condition_mean_all(measurements)
-  
-  #results <- conditions_statistics %>%
-  #  summarise(d = (mean[condition=='different']-mean[condition=='same'])/
-  #              sqrt((sd[condition=='different']^2+sd[condition=='same']^2)/2),
-  #            n1 = n[condition=='different'], n2=n[condition=='same'],
-  #            g = d * (1 - 3/(4*(n1+n2-2) - 1)), 
-  #            se =  sqrt(((n1+n2)/(n1*n2)) + (d^2/(2*n1*n2))))
-              
-  #return(list('d'= results$d, 'g'= results$g, 'se'= results$se))
-  return(conditions_statistics)
 }
 
 calculate_standardised_mean_gain_per_contrast <- function(dtw_distances_file_path){
@@ -74,9 +48,8 @@ calculate_standardised_mean_gain_per_contrast <- function(dtw_distances_file_pat
               n1 = n[condition=='different'], n2=n[condition=='same'])
   effect_sizes_contrasts <- effect_sizes_contrasts %>% 
     mutate(g = d * (1 - 3/(4*(n1+n2-2) - 1)), 
-           se =  sqrt(((n1+n2)/(n1*n2)) + (d^2/(2*n1*n2))),
-           se_g = sqrt(((n1+n2)/(n1*n2)) + (g^2/(2*n1*n2))),
-           sd = se * sqrt(n1+n2))
+           se_d =  sqrt(((n1+n2)/(n1*n2)) + (d^2/(2*n1*n2))),
+           se_g = sqrt(((n1+n2)/(n1*n2)) + (g^2/(2*n1*n2))))
   effect_sizes_contrasts$t <- 0
   effect_sizes_contrasts$p_value <- 0
   
@@ -95,16 +68,24 @@ calculate_standardised_mean_gain_per_contrast <- function(dtw_distances_file_pat
 }
 
 calculate_mean_effect <- function(effect_sizes_per_contrast, effect, alpha){
-  n = nrow(effect_sizes_per_contrast)
-  mean_es = mean(effect_sizes_per_contrast[[effect]])
-  sd_es = sd(effect_sizes_per_contrast[[effect]])
-  se_es = sd_es/sqrt(n)
-  signficant = !any(effect_sizes_per_contrast[["p_value"]]>alpha)
-  ci.lb = mean_es - 1.959964*se_es
-  ci.ub = mean_es + 1.959964*se_es
+  if(effect=='g'){
+    rma_output <- rma(g, sei=se_g, data=effect_sizes_per_contrast, method='REML')  
+  }else{
+    # d
+    rma_output <- rma(d, sei=se_d, data=effect_sizes_per_contrast, method='REML')
+  }
   
+  mean_es = rma_output$b[1]
+  se_es = rma_output$se
+  ci.lb = rma_output$ci.lb
+  ci.ub = rma_output$ci.ub
+  if(rma_output$pval <= alpha){
+    significant = TRUE
+  }else{
+    significant = FALSE
+  }
   
-  return(list('mean_es'=mean_es, 'sd_es'=sd_es, 'significant'=signficant, 'n'=n,
+  return(list('mean_es'=mean_es, 'significant'=significant, 
               'se_es'=se_es, 'ci.lb'=ci.lb, 'ci.ub'=ci.ub))
 }
 

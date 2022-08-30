@@ -3,7 +3,6 @@
 
 library(tidyverse)
 library(ggplot2)
-library(metafor)
 
 options(dplyr.summarise.inform = FALSE)
 
@@ -15,8 +14,6 @@ source('replication_analyses.R')
 
 obtain_vowel_effects_for_all_epochs <- function(folder, model, contrasts_type, es, alpha){
   es_epochs <- list()
-  es_all_list <- list()
-  es_rma_list <- list()
   steps = c(0, 562, 1125, 1688, 2251, 2814, 3377, 3940, 4503, 5066)
   steps = c(steps, 1:10)
   for (epoch in steps) {
@@ -35,20 +32,11 @@ obtain_vowel_effects_for_all_epochs <- function(folder, model, contrasts_type, e
     es_all_contrasts <- rbind(es_contrasts_c, es_contrasts_ivc)
     write.csv(es_all_contrasts, paste("./",model,"_vowel_results/", model, "_", contrasts_type, "_", as.character(epoch), ".csv", sep=""))
     
-    es_all <- calculate_standardised_mean_gain_all(results_path_c, results_path_ivc)
-    write.csv(es_all, paste("./",model,"_vowel_results_all/", model, "_", contrasts_type, "_", as.character(epoch), ".csv", sep=""))
-    #es_all_list <- append(es_all_list, list(es_all))
-    
     es_epoch <- calculate_mean_effect(es_all_contrasts, es, alpha)
     es_epochs <- append(es_epochs, list(es_epoch))
-    
-    rma_output <- rma(g, sei=se_g, data=es_all_contrasts, method='REML')
-    es_rma <- list('mean_es'=rma_output$b[1], 'ci.lb'=rma_output$ci.lb, 
-                   'ci.ub'=rma_output$ci.ub, 'se_es'=rma_output$se)
-    es_rma_list <- append(es_rma_list, list(es_rma))
   }
   
-  return (list('avg'= es_epochs, 'rma'= es_rma_list))
+  return(es_epochs)
 }
 
 test_distributions <- function(folder, model, contrasts_type){
@@ -211,36 +199,4 @@ apc_results_nonnat['capability'] = 'Vowel discr. (non-native)'
 
 apc_results = rbind(apc_results_nat, apc_results_nonnat)
 write_csv(apc_results, 'apc_results_vowel_discr.csv')
-
-
-# Test code to delete
-
-nat_results <- obtain_vowel_effects_for_all_epochs("Model_Dev_Results/", "apc", "native", "g", 0.05)
-nonnat_results <- obtain_vowel_effects_for_all_epochs("Model_Dev_Results/", "apc", "non_native", "g", 0.05)
-
-st <- c(0:9)*1.73 
-st <- c(st, c(1:9)*17.3, 9*17.3 + 10.3)
-days <- c()
-
-es_f <- c()
-ci.ub_f <-c()
-ci.lb_f <- c()
-es_type <- c()
-
-for (i in 1:20){
-  es_f <- c(es_f, nonnat_results$avg[[i]]$mean_es)
-  ci.lb_f <- c(ci.lb_f, nonnat_results$avg[[i]]$ci.lb)
-  ci.ub_f <- c(ci.ub_f, nonnat_results$avg[[i]]$ci.ub)
-  es_type <-c(es_type, 'avg')
-  days <- c(days, st[i])
-  
-  es_f <- c(es_f, nonnat_results$rma[[i]]$mean_es)
-  ci.lb_f <- c(ci.lb_f, nonnat_results$rma[[i]]$ci.lb)
-  ci.ub_f <- c(ci.ub_f, nonnat_results$rma[[i]]$ci.ub)
-  es_type <-c(es_type, 'rma')
-  days <- c(days, st[i])
-}
-
-nat_avg_df <- data.frame(days = days, es=es_f, ci.lb=ci.lb_f, ci.ub=ci.ub_f)
-ggplot(nat_avg_df, aes(x=days, y=es, colour=es_type)) + geom_line() + geom_errorbar(aes(ymin=ci.lb, ymax=ci.ub))
 

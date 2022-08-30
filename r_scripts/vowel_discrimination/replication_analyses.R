@@ -7,7 +7,7 @@ library(tidyverse)
 library(meta)
 library(metafor)
 
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 nat_vowels <- read.csv("Vowel_discrimination_native_r.csv")  # 145 records
 nonnat_vowels <- read.csv("Vowel_discrimination_non_native_r.csv")  # 49 records

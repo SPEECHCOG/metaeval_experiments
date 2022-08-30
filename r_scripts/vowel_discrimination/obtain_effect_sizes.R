@@ -16,6 +16,15 @@ get_condition_mean <- function(measurements){
   return(mean_per_condition)
 }
 
+get_condition_mean_all <- function(measurements){
+  mean_per_condition <- measurements %>%
+    group_by(condition) %>%
+    summarise(mean = mean(distance, na.rm=TRUE), 
+              sd = sd(distance, na.rm=TRUE),
+              n = n())
+  return(mean_per_condition)
+}
+
 get_t_statistics <- function(contrast_measurements){
   tryCatch(
     expr = {
@@ -28,6 +37,24 @@ get_t_statistics <- function(contrast_measurements){
       return(t_test)
     }
   )
+}
+
+calculate_standardised_mean_gain_all <- function(dtw_distances1_path, dtw_distances2_path){
+  measurements1 <- read.csv(dtw_distances1_path, sep=';')
+  measurements2 <- read.csv(dtw_distances2_path, sep=';')
+  measurements <- rbind(measurements1, measurements2)
+  
+  conditions_statistics <- get_condition_mean_all(measurements)
+  
+  #results <- conditions_statistics %>%
+  #  summarise(d = (mean[condition=='different']-mean[condition=='same'])/
+  #              sqrt((sd[condition=='different']^2+sd[condition=='same']^2)/2),
+  #            n1 = n[condition=='different'], n2=n[condition=='same'],
+  #            g = d * (1 - 3/(4*(n1+n2-2) - 1)), 
+  #            se =  sqrt(((n1+n2)/(n1*n2)) + (d^2/(2*n1*n2))))
+              
+  #return(list('d'= results$d, 'g'= results$g, 'se'= results$se))
+  return(conditions_statistics)
 }
 
 calculate_standardised_mean_gain_per_contrast <- function(dtw_distances_file_path){
@@ -46,7 +73,10 @@ calculate_standardised_mean_gain_per_contrast <- function(dtw_distances_file_pat
                 sqrt((sd[condition=='different']^2+sd[condition=='same']^2)/2),
               n1 = n[condition=='different'], n2=n[condition=='same'])
   effect_sizes_contrasts <- effect_sizes_contrasts %>% 
-    mutate(g = d * (1 - 3/(4*(n1+n2-2) - 1)))
+    mutate(g = d * (1 - 3/(4*(n1+n2-2) - 1)), 
+           se =  sqrt(((n1+n2)/(n1*n2)) + (d^2/(2*n1*n2))),
+           se_g = sqrt(((n1+n2)/(n1*n2)) + (g^2/(2*n1*n2))),
+           sd = se * sqrt(n1+n2))
   effect_sizes_contrasts$t <- 0
   effect_sizes_contrasts$p_value <- 0
   
@@ -64,58 +94,66 @@ calculate_standardised_mean_gain_per_contrast <- function(dtw_distances_file_pat
   return(effect_sizes_contrasts)
 }
 
-calculate_mean_effect <- function(effect_sizes_per_contrast, effect){
+calculate_mean_effect <- function(effect_sizes_per_contrast, effect, alpha){
+  n = nrow(effect_sizes_per_contrast)
   mean_es = mean(effect_sizes_per_contrast[[effect]])
   sd_es = sd(effect_sizes_per_contrast[[effect]])
-  return(list('mean_es'=mean_es, 'sd_es'=sd_es))
+  se_es = sd_es/sqrt(n)
+  signficant = !any(effect_sizes_per_contrast[["p_value"]]>alpha)
+  ci.lb = mean_es - 1.959964*se_es
+  ci.ub = mean_es + 1.959964*se_es
+  
+  
+  return(list('mean_es'=mean_es, 'sd_es'=sd_es, 'significant'=signficant, 'n'=n,
+              'se_es'=se_es, 'ci.lb'=ci.lb, 'ci.ub'=ci.ub))
 }
 
 # Calculate effect sizes for Native and Non-native contrasts
 es = 'g'
 
 # APC Native contrasts
-apc_ivc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_apc_ivc_native.csv')
-apc_hc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Hillenbrands_Corpus/dtw_distances_apc_hc_native.csv')
-apc_nat <- rbind(apc_ivc_nat, apc_hc_nat)
-apc_es_nat <- calculate_mean_effect(apc_nat, es)
+#apc_ivc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_apc_ivc_native.csv')
+#apc_hc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Hillenbrands_Corpus/dtw_distances_apc_hc_native.csv')
+#apc_nat <- rbind(apc_ivc_nat, apc_hc_nat)
+#apc_es_nat <- calculate_mean_effect(apc_nat, es)
 
-apc_untrained_ivc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_apc_untrained_ivc_native.csv')
-apc_untrained_hc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Hillenbrands_Corpus/dtw_distances_apc_untrained_hc_native.csv')
-apc_untrained_nat <- rbind(apc_untrained_ivc_nat, apc_untrained_hc_nat)
-apc_untrained_es_nat <- calculate_mean_effect(apc_untrained_nat, es)
+#apc_untrained_ivc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_apc_untrained_ivc_native.csv')
+#apc_untrained_hc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Hillenbrands_Corpus/dtw_distances_apc_untrained_hc_native.csv')
+#apc_untrained_nat <- rbind(apc_untrained_ivc_nat, apc_untrained_hc_nat)
+#apc_untrained_es_nat <- calculate_mean_effect(apc_untrained_nat, es)
 
 # APC Non-native contrasts
-apc_ivc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_apc_ivc_non_native.csv')
-apc_oc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/OLLO_Corpus/dtw_distances_apc_oc_non_native.csv')
-apc_nonnat <- rbind(apc_ivc_nonnat, apc_oc_nonnat)
-apc_es_nonnat <- calculate_mean_effect(apc_nonnat, es)
+#apc_ivc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_apc_ivc_non_native.csv')
+#apc_oc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/OLLO_Corpus/dtw_distances_apc_oc_non_native.csv')
+#apc_nonnat <- rbind(apc_ivc_nonnat, apc_oc_nonnat)
+#apc_es_nonnat <- calculate_mean_effect(apc_nonnat, es)
 
-apc_untrained_ivc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_apc_untrained_ivc_non_native.csv')
-apc_untrained_oc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/OLLO_Corpus/dtw_distances_apc_untrained_oc_non_native.csv')
-apc_untrained_nonnat <- rbind(apc_untrained_ivc_nonnat, apc_untrained_oc_nonnat)
-apc_untrained_es_nonnat <- calculate_mean_effect(apc_untrained_nonnat, es)
+#apc_untrained_ivc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_apc_untrained_ivc_non_native.csv')
+#apc_untrained_oc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/OLLO_Corpus/dtw_distances_apc_untrained_oc_non_native.csv')
+#apc_untrained_nonnat <- rbind(apc_untrained_ivc_nonnat, apc_untrained_oc_nonnat)
+#apc_untrained_es_nonnat <- calculate_mean_effect(apc_untrained_nonnat, es)
 
 # CPC Native contrasts
-cpc_ivc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_cpc_ivc_native.csv')
-cpc_hc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Hillenbrands_Corpus/dtw_distances_cpc_hc_native.csv')
-cpc_nat <- rbind(cpc_ivc_nat, cpc_hc_nat)
-cpc_es_nat <- calculate_mean_effect(cpc_nat, es)
+#cpc_ivc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_cpc_ivc_native.csv')
+#cpc_hc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Hillenbrands_Corpus/dtw_distances_cpc_hc_native.csv')
+#cpc_nat <- rbind(cpc_ivc_nat, cpc_hc_nat)
+#cpc_es_nat <- calculate_mean_effect(cpc_nat, es)
 
-cpc_untrained_ivc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_cpc_untrained_ivc_native.csv')
-cpc_untrained_hc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Hillenbrands_Corpus/dtw_distances_cpc_untrained_hc_native.csv')
-cpc_untrained_nat <- rbind(cpc_untrained_ivc_nat, cpc_untrained_hc_nat)
-cpc_untrained_es_nat <- calculate_mean_effect(cpc_untrained_nat, es)
+#cpc_untrained_ivc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_cpc_untrained_ivc_native.csv')
+#cpc_untrained_hc_nat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Hillenbrands_Corpus/dtw_distances_cpc_untrained_hc_native.csv')
+#cpc_untrained_nat <- rbind(cpc_untrained_ivc_nat, cpc_untrained_hc_nat)
+#cpc_untrained_es_nat <- calculate_mean_effect(cpc_untrained_nat, es)
 
 # CPC Non-native contrasts
-cpc_ivc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_cpc_ivc_non_native.csv')
-cpc_oc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/OLLO_Corpus/dtw_distances_cpc_oc_non_native.csv')
-cpc_nonnat <- rbind(cpc_ivc_nonnat, cpc_oc_nonnat)
-cpc_es_nonnat <- calculate_mean_effect(cpc_nonnat, es)
+#cpc_ivc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_cpc_ivc_non_native.csv')
+#cpc_oc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/OLLO_Corpus/dtw_distances_cpc_oc_non_native.csv')
+#cpc_nonnat <- rbind(cpc_ivc_nonnat, cpc_oc_nonnat)
+#cpc_es_nonnat <- calculate_mean_effect(cpc_nonnat, es)
 
-cpc_untrained_ivc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_cpc_untrained_ivc_non_native.csv')
-cpc_untrained_oc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/OLLO_Corpus/dtw_distances_cpc_untrained_oc_non_native.csv')
-cpc_untrained_nonnat <- rbind(cpc_untrained_ivc_nonnat, cpc_untrained_oc_nonnat)
-cpc_untrained_es_nonnat <- calculate_mean_effect(cpc_untrained_nonnat, es)
+#cpc_untrained_ivc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/Isolated_Vowels_Corpus/dtw_distances_cpc_untrained_ivc_non_native.csv')
+#cpc_untrained_oc_nonnat <- calculate_standardised_mean_gain_per_contrast('Model_Results/OLLO_Corpus/dtw_distances_cpc_untrained_oc_non_native.csv')
+#cpc_untrained_nonnat <- rbind(cpc_untrained_ivc_nonnat, cpc_untrained_oc_nonnat)
+#cpc_untrained_es_nonnat <- calculate_mean_effect(cpc_untrained_nonnat, es)
 
 
 # ES comparison with infants' ES
@@ -145,27 +183,27 @@ get_es_plot <- function(es_data, lb_infants){
 # TODO Update Infants' ES! 
 
 # Native contrasts
-labels_significance = c('n.s.'="", 's.'="*")
-es_data_nat <- data.frame(es = c(apc_es_nat$mean_es, cpc_es_nat$mean_es, 0.42),
-                      source = c('APC', 'CPC', 'Infants'),
-                      lb = c(NA, NA, 0.33),
-                      ub = c(NA, NA, 0.51),
-                      significance = factor(c('s.', 's.', 's.'), labels=labels_significance, levels=c('n.s.', 's.')))
+#labels_significance = c('n.s.'="", 's.'="*")
+#es_data_nat <- data.frame(es = c(apc_es_nat$mean_es, cpc_es_nat$mean_es, 0.42),
+#                      source = c('APC', 'CPC', 'Infants'),
+#                      lb = c(NA, NA, 0.33),
+#                      ub = c(NA, NA, 0.51),
+#                      significance = factor(c('s.', 's.', 's.'), labels=labels_significance, levels=c('n.s.', 's.')))
 
-lb_infants_nat = es_data_nat[es_data_nat$source=='Infants']$lb
+#lb_infants_nat = es_data_nat[es_data_nat$source=='Infants']$lb
 
-get_es_plot(es_data_nat, lb_infants_nat)
+#get_es_plot(es_data_nat, lb_infants_nat)
 
 # Non-native contrasts
-es_data_nonnat <- data.frame(es = c(apc_es_nonnat$mean_es, cpc_es_nonnat$mean_es, 0.46),
-                          source = c('APC', 'CPC', 'Infants'),
-                          lb = c(NA, NA, 0.21),
-                          ub = c(NA, NA, 0.72),
-                          significance = factor(c('s.', 's.', 's.'), labels=labels_significance, levels=c('n.s.', 's.')))
+#es_data_nonnat <- data.frame(es = c(apc_es_nonnat$mean_es, cpc_es_nonnat$mean_es, 0.46),
+#                          source = c('APC', 'CPC', 'Infants'),
+#                          lb = c(NA, NA, 0.21),
+#                          ub = c(NA, NA, 0.72),
+#                          significance = factor(c('s.', 's.', 's.'), labels=labels_significance, levels=c('n.s.', 's.')))
 
-lb_infants_nonnat = es_data_nonnat[es_data_nonnat$source=='Infants']$lb
+#lb_infants_nonnat = es_data_nonnat[es_data_nonnat$source=='Infants']$lb
 
-get_es_plot(es_data_nonnat, lb_infants_nonnat)
+#get_es_plot(es_data_nonnat, lb_infants_nonnat)
 
 # Development of ES (0-100 h training)
 get_es_change_plot <- function(es_dev, lb_y=NA, ub_y=NA, pos_legend=NA){
@@ -196,22 +234,22 @@ get_es_change_plot <- function(es_dev, lb_y=NA, ub_y=NA, pos_legend=NA){
 }
 
 # Native contrasts
-es_dev_nat <- data.frame(hours = c('0', '100', '0', '100'),
-                     es = c(apc_untrained_es_nat$mean_es, apc_es_nat$mean_es, cpc_untrained_es_nat$mean_es, cpc_es_nat$mean_es),
-                     significance = factor(c('s.', 's.', 's.', 's.'), labels=labels_significance, levels=c('n.s.', 's.')),
-                     pos_label_x = c(-0.1,0.05,-0.1, 0.05),
-                     pos_label_y = c(-0.1,0.02,0.01, 0.02),
-                     model = c('APC', 'APC', 'CPC', 'CPC'))
+#es_dev_nat <- data.frame(hours = c('0', '100', '0', '100'),
+#                     es = c(apc_untrained_es_nat$mean_es, apc_es_nat$mean_es, cpc_untrained_es_nat$mean_es, cpc_es_nat$mean_es),
+#                     significance = factor(c('s.', 's.', 's.', 's.'), labels=labels_significance, levels=c('n.s.', 's.')),
+#                     pos_label_x = c(-0.1,0.05,-0.1, 0.05),
+#                     pos_label_y = c(-0.1,0.02,0.01, 0.02),
+#                     model = c('APC', 'APC', 'CPC', 'CPC'))
 
-get_es_change_plot(es_dev_nat, -1.5,2.5)
+#get_es_change_plot(es_dev_nat, -1.5,2.5)
 
 # Non-native contrasts
-es_dev_nonnat <- data.frame(hours = c('0', '100', '0', '100'),
-                         es = c(apc_untrained_es_nonnat$mean_es, apc_es_nonnat$mean_es, cpc_untrained_es_nonnat$mean_es, cpc_es_nonnat$mean_es),
-                         significance = factor(c('s.', 's.', 's.', 's.'), labels=labels_significance, levels=c('n.s.', 's.')),
-                         pos_label_x = c(-0.1,0.08,-0.1, 0.08),
-                         pos_label_y = c(0.01,0.02,0.01, 0.02),
-                         model = c('APC', 'APC', 'CPC', 'CPC'))
+#es_dev_nonnat <- data.frame(hours = c('0', '100', '0', '100'),
+#                         es = c(apc_untrained_es_nonnat$mean_es, apc_es_nonnat$mean_es, cpc_untrained_es_nonnat$mean_es, cpc_es_nonnat$mean_es),
+#                         significance = factor(c('s.', 's.', 's.', 's.'), labels=labels_significance, levels=c('n.s.', 's.')),
+#                         pos_label_x = c(-0.1,0.08,-0.1, 0.08),
+#                         pos_label_y = c(0.01,0.02,0.01, 0.02),
+#                         model = c('APC', 'APC', 'CPC', 'CPC'))
 
-get_es_change_plot(es_dev_nonnat, -1, 3.2, c(0.2, 0.8))
+#get_es_change_plot(es_dev_nonnat, -1, 3.2, c(0.2, 0.8))
 

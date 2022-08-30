@@ -11,7 +11,7 @@ library(knitr)
 library(kableExtra)
 library(ggpubr)
 
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Basic meta-analysis to obtain mean effect size
 
@@ -133,7 +133,7 @@ papaja::apa_table(coefs,
 
 # Basic linear model d ~ 1 + age
 # For reference to comparison with models (computational evaluation paper)
-ggplot(ds_zt_nae, 
+infants_trajectory <- ggplot(ds_zt_nae, 
        aes(x = age_mo, y = d_z)) + 
   geom_point(aes(size = n), alpha = .3) + 
   geom_hline(yintercept = 0, linetype = "dashed", color = "grey") +
@@ -148,7 +148,7 @@ ggplot(ds_zt_nae,
         axis.line = element_line(color='black', size=1)) +
   labs(colour="")
 
-
+print(infants_trajectory)
 
 
 

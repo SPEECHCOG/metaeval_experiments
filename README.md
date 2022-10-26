@@ -35,7 +35,7 @@ The stimuli employed for this test correspond to the utterances recorded
 in the [ManyBabies experiment](https://manybabies.github.io/)
 
 You can download stimuli from the 
-(ManyBabies1 repository)[https://osf.io/re95x/]. List of ADS and IDS 
+[ManyBabies1 repository](https://osf.io/re95x/). List of ADS and IDS 
 utterances selected available on 
 [https://osf.io/ua3yh/](https://osf.io/ua3yh/).
 

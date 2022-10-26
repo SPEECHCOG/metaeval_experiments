@@ -1,9 +1,8 @@
 # MetaEval Experiments
 This repository contains the code to replicate the experiments for the 
 infant-direct speech (IDS) preference and vowel discrimination capabilities 
-reported in the manuscript "Evaluation of computational models of infant 
-language development against robust empirical data from meta-analyses: 
-what, why, and how?"
+reported in the manuscript "Introducing meta-analysis in the evaluation of 
+computational models of infant language development"
 
 # Requirements
 

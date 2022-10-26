@@ -34,7 +34,6 @@ get_t_statistics <- function(contrast_measurements){
 calculate_standardised_mean_gain_per_contrast <- function(dtw_distances_file_path){
   # one effect size per paired trial
   measurements <- read.csv(dtw_distances_file_path, sep = ';')
-  
   condition_statistics <- get_condition_mean(measurements)
   # print(condition_statistics)
   
@@ -49,7 +48,9 @@ calculate_standardised_mean_gain_per_contrast <- function(dtw_distances_file_pat
   effect_sizes_contrasts <- effect_sizes_contrasts %>% 
     mutate(g = d * (1 - 3/(4*(n1+n2-2) - 1)), 
            se_d =  sqrt(((n1+n2)/(n1*n2)) + (d^2/(2*n1*n2))),
-           se_g = sqrt(((n1+n2)/(n1*n2)) + (g^2/(2*n1*n2))))
+           se_g = sqrt(((n1+n2)/(n1*n2)) + (g^2/(2*n1*n2))),
+           w_d = 1/(se_d^2),
+           w_g = 1/(se_g^2))
   effect_sizes_contrasts$t <- 0
   effect_sizes_contrasts$p_value <- 0
   
@@ -68,18 +69,26 @@ calculate_standardised_mean_gain_per_contrast <- function(dtw_distances_file_pat
 }
 
 calculate_mean_effect <- function(effect_sizes_per_contrast, effect, alpha){
+  # Equations from Practical Meta-analysis (Lipsey and Wilson, 2001; pp 114)
   if(effect=='g'){
-    rma_output <- rma(g, sei=se_g, data=effect_sizes_per_contrast, method='REML')  
+    tmp_es <- effect_sizes_per_contrast %>% mutate(weight = w_g*g)
+    weighted_es = sum(tmp_es$weight)/sum(tmp_es$w_g)
+    se_weighted_es = sqrt(1/(sum(tmp_es$w_g)))
+    
   }else{
     # d
-    rma_output <- rma(d, sei=se_d, data=effect_sizes_per_contrast, method='REML')
+    tmp_es <- effect_sizes_per_contrast %>% mutate(weight = w_d*d)
+    weighted_es = sum(tmp_es$weight)/sum(tmp_es$w_d)
+    se_weighted_es = sqrt(1/(sum(tmp_es$w_d)))
   }
   
-  mean_es = rma_output$b[1]
-  se_es = rma_output$se
-  ci.lb = rma_output$ci.lb
-  ci.ub = rma_output$ci.ub
-  if(rma_output$pval <= alpha){
+  mean_es = weighted_es
+  se_es = se_weighted_es
+  z = qnorm(p=alpha/2, lower.tail = FALSE)
+  ci.lb = mean_es - (z*se_es)
+  ci.ub = mean_es + (z*se_es)
+  
+  if((abs(mean_es)/se_es) > z){
     significant = TRUE
   }else{
     significant = FALSE

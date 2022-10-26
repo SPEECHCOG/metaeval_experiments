@@ -169,11 +169,12 @@ python corpus_processing/create_input_features.py --corpus ivc --audio_path path
 # Models
 We trained Autoregressive Predictive Coding (APC) and Contrastive
 Predictive Coding (CPC) models with 
-[LibriSpeech](https://www.openslr.org/12/) 100 hours subset. 
-Trained models and untrained models can be found in `models`
+[LibriSpeech](https://www.openslr.org/12/) 960 hours and [SpokenCOCO](https://groups.csail.mit.edu/sls/downloads/placesaudio/index.cgi)
+742 hours. Example of untrained, and 18th epoch trained APC models 
+can be found in `models` folder.
 
 Code to train models can be found on 
-[PC models](https://github.com/SPEECHCOG/pc_models_analysis).
+[PC models](https://github.com/SPEECHCOG/metaeval_dev_trajectories).
 
 ## Predictions for Vowel Discrimination
 For the vowel discrimination test, you will need to calculate the 
@@ -224,21 +225,14 @@ To obtain the effect sizes, you will need to run the R scripts. We
 recommend the use of [RStudio](https://www.rstudio.com/) for this section. 
 
 You can replicate the results of the manuscript by employing the csv 
-files already available in the folder `Model_Results`
-in `r_scripts/<test>/Model_Results`. Alternatively you can copy the 
+files already available in the folder `test_results_large_apc`
+in `r_scripts/<test>/test_results_large_apc`. Alternatively you can copy the 
 csv files previously generate in that folder. 
 
 You are ready to run the scripts to obtain the effect sizes and plots
 as in the manuscript. For the IDS preference test: 
 `r_scripts/ids_preference/obtain_effect_sizes.R`and for the vowel
 discrimination test: `r_scripts/vowel_discrimination/obtain_effect_sizes.R`
-
-
-# Citing this work
-
-María Andrea Cruz Blandón, Alejandrina Cristia, Okko Räsänen. 
-Evaluation of computational models of infant language development 
-against robust empirical data from meta-analyses: what, why, and how?
 
 # References
 

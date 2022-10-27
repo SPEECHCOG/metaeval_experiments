@@ -40,8 +40,6 @@ obtain_steps <- function(folder, model){
 
 obtain_vowel_effects_for_all_epochs <- function(folder, model, contrasts_type, es, alpha){
   es_epochs <- list()
-  #steps = c(0, 562, 1125, 1688, 2251, 2814, 3377, 3940, 4503, 5066)
-  #steps = c(steps, 1:10)
   steps_info = obtain_steps(folder, model)
   steps = steps_info[['steps']]
   batch_steps = steps_info[['batch_steps']]
@@ -71,8 +69,6 @@ obtain_vowel_effects_for_all_epochs <- function(folder, model, contrasts_type, e
 }
 
 test_distributions <- function(folder, model, contrasts_type){
-  # steps = c(0, 562, 1125, 1688, 2251, 2814, 3377, 3940, 4503, 5066)
-  # steps = c(steps, 1:10)
   steps_info = obtain_steps(folder, model)
   steps = steps_info[['steps']]
   batch_steps = steps_info[['batch_steps']]
@@ -123,8 +119,8 @@ get_vowel_disc_effects_dataframe <- function(folder, model, contrasts_type, es, 
     significant <- c(significant, effects_list[[epoch]]$significant)
   }
   
-  age <- c(0:(batch_steps-1))* batch_age #1.73  # days represented by 10 hours of speech
-  age <- c(age, c(1:epoch_steps)* epoch_age) #17.3, 9*17.3 + 10.3) # total days represented by 960 hours of speech. last chunk only contains 60 hours of speech
+  age <- c(0:(batch_steps-1))* batch_age
+  age <- c(age, c(1:epoch_steps)* epoch_age) 
   
   checkpoint <- rep("batch", batch_steps-1)
   checkpoint <- c("epoch", checkpoint, rep("epoch",epoch_steps))
@@ -142,15 +138,6 @@ plot_developmental_trajectories <- function(folder, model, contrast_type, es, al
   model_effects <- get_vowel_disc_effects_dataframe(folder, model, contrast_type, es, alpha, batch_age, epoch_age)
   model_effects <- model_effects %>% filter(checkpoint!='batch')
   
-  # lm_fit = lm(d~days, model_effects)
-  # age_significance <- summary(lm_fit)$coefficients[2,4]
-  # model_mean_es <- summary(lm_fit)$coefficients[1,1]
-  # 
-  # if(age_significance>alpha){
-  #   model_effects <- model_effects %>% mutate(predicted = model_mean_es)
-  # }else{
-  #   model_effects <- model_effects %>% mutate(predicted = predict(lm_fit, model_effects))
-  # }
   vowel_mo = 30.42
   if(contrast_type=="native"){
     inf_data = nat_vowels_mod
@@ -197,16 +184,9 @@ plot_developmental_trajectories <- function(folder, model, contrast_type, es, al
   if(!is.na(lb_y) & !is.na(ub_y)){
     p <- p + scale_y_continuous(expand = c(0, 0), limits = c(lb_y, ub_y),
                                 breaks = seq(lb_y, ub_y, 1)) +
-      #xlim(0, 15) +
       coord_cartesian(clip = "off")
   }
   p <- p +
-    # model
-    # geom_line(
-    #   data=model_effects, 
-    #   size = 0.9,
-    #   aes(y=predicted, x=days, colour="#F8766D")
-    # ) + 
     geom_point(
       colour = '#F28C28',
       size = 2, 

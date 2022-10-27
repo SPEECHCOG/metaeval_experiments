@@ -41,10 +41,6 @@ obtain_steps <- function(folder, model){
 
 obtain_ids_effects_for_all_epochs <- function(folder, model) {
   es_epochs <- list()
-  # identifier of first 10 h speech checkpoints
-  # steps = c(0, 562, 1125, 1688, 2251, 2814, 3377, 3940, 4503, 5066)
-  # steps = c(steps, 1:10) # identifiers of 100 h speech checkpoints
-  
   steps_info = obtain_steps(folder, model)
   steps = steps_info[['steps']]
   batch_steps = steps_info[['batch_steps']]
@@ -79,9 +75,9 @@ get_ids_effects_dataframe <- function(folder, model, alpha, batch_age, epoch_age
     p_values <- c(p_values, effects_list[[epoch]]$'p-value')
   }
   
-  age <- c(0:(batch_steps-1)) * batch_age # 1.73  # days represented by 10 hours of speech
+  age <- c(0:(batch_steps-1)) * batch_age 
   age <-
-    c(age, c(1:epoch_steps) * epoch_age) # 17.3, 9 * 17.3 + 10.3) # total days represented by 960 hours of speech. last chunk only contains 60 hours of speech
+    c(age, c(1:epoch_steps) * epoch_age) 
   
   checkpoint <- rep("batch", batch_steps-1)
   checkpoint <- c("epoch", checkpoint, rep("epoch", epoch_steps))
@@ -99,8 +95,7 @@ get_ids_effects_dataframe <- function(folder, model, alpha, batch_age, epoch_age
 plot_developmental_trajectories <- function(folder, model, alpha, batch_age, epoch_age) {
   model_effects <- get_ids_effects_dataframe(folder, model, alpha, batch_age, epoch_age)
   model_effects <- model_effects %>% filter(checkpoint!='batch')
-  #ds_zt_nae <- ds_zt_nae %>% mutate(age_days=age_mo*30.4375) # according to scale used in the original data
-  
+ 
   p = ggplot(ds_zt_nae,
              aes(x = age_mo, y = d_z)) +
     geom_point(aes(size = n), alpha = .3) +
@@ -109,20 +104,11 @@ plot_developmental_trajectories <- function(folder, model, alpha, batch_age, epo
                color = "grey") +
     geom_smooth(
       method = "lm",
-      #colour = "blue",
       size = 0.9,
       se = TRUE,
       fill = "grey70",
       aes(color="blue")
     ) +
-    # model
-    # geom_smooth(
-    #   method = "lm",
-    #   colour = "#F8766D",
-    #   se = FALSE,
-    #   data = model_effects,
-    #   aes(x= age, y = d, color="#F8766D")
-    # ) + 
     geom_point(
       colour = '#F28C28', 
       size = 2, 

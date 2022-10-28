@@ -211,18 +211,6 @@ plot_developmental_trajectories <- function(folder, model, contrast_type, es, al
   
 }
 
-## Results APC trained with LibriSpeech
-plot_developmental_trajectories("Model_Dev_Results/", "apc", "native", "g", 0.05, 0.06, 0.57)
-apc_results_nat = get_vowel_disc_effects_dataframe("Model_Dev_Results/", "apc", "native", "g", 0.05, 0.06, 0.57)
-apc_results_nat['capability'] = 'Vowel discr. (native)'
-
-plot_developmental_trajectories("Model_Dev_Results/", "apc", "non_native", "g", 0.05, 0.06, 0.57)
-apc_results_nonnat = get_vowel_disc_effects_dataframe("Model_Dev_Results/", "apc", "non_native", "g", 0.05, 0.06, 0.57)
-apc_results_nonnat['capability'] = 'Vowel discr. (non-native)'
-
-apc_results = rbind(apc_results_nat, apc_results_nonnat)
-write_csv(apc_results, 'apc_results_vowel_discr.csv')
-
 ## Results APC trained with LibriSpeech and Spoken COCO
 plot_developmental_trajectories("test_results_large_apc/", "apc", "native", "g", 0.05, 0.06, 0.57)
 apc_large_results_nat = get_vowel_disc_effects_dataframe("test_results_large_apc/", "apc", "native", "g", 0.05, 0.06, 0.57)

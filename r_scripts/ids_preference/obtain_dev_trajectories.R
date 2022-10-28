@@ -142,11 +142,6 @@ plot_developmental_trajectories <- function(folder, model, alpha, batch_age, epo
   p
 }
 
-# Results APC trained on Librispeech
-plot_developmental_trajectories("Model_Dev_Results/", "apc", 0.05, 0.06, 0.57)
-apc_resutls = get_ids_effects_dataframe("Model_Dev_Results/", "apc", 0.05, 0.06, 0.57)
-apc_resutls['capability'] = 'IDS Preference'
-write_csv(apc_resutls, 'apc_results_ids.csv')
 
 # Results APC trained on LibriSpeech and Spoken COCO
 plot_developmental_trajectories("test_results_large_apc/", "apc", 0.05, 0.06, 0.57)

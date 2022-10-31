@@ -2,7 +2,19 @@
 This repository contains the code to replicate the experiments for the 
 infant-direct speech (IDS) preference and vowel discrimination capabilities 
 reported in the manuscript "Introducing meta-analysis in the evaluation of 
-computational models of infant language development"
+computational models of infant language development". Replication can be
+either from scratch or from the precomputed results. 
+
+For replication from scratch, you will need to download the data as explain 
+in [Corpora](#corpora) section, train the models from scratch following the 
+instructions on [Models](https://github.com/SPEECHCOG/metaeval_dev_trajectories) 
+and generate the predictions as explained in [Predictions](#predictions), and 
+then run the experiments as explained in [Run test](#run-tests) and [Obtain 
+effect sizes](#obtain-effect-sizes) sections.
+
+For replication from the precomputed results, you can directly follow the 
+instructions in [Obtain effect sizes](#obtain-effect-sizes). This will 
+reproduce figures 5.a, 5.b and 5.c in the manuscript.
 
 # Requirements
 
@@ -26,18 +38,26 @@ Then you can activate the conda environment for excuting the code
 conda activate metaeval_env
 ```
 
+Then you will to clone this repository, for example:
+
+```
+git clone git@github.com:SPEECHCOG/metaeval_experiments.git
+```
+
 # Corpora
 In order to run the experiments, you will need to download the stimuli
 for each test.
 
-## IDS Preference
+## IDS Preference data
 The stimuli employed for this test correspond to the utterances recorded
 in the [ManyBabies experiment](https://manybabies.github.io/)
 
 You can download stimuli from the 
-[ManyBabies1 repository](https://osf.io/re95x/). List of ADS and IDS 
-utterances selected available on 
-[https://osf.io/ua3yh/](https://osf.io/ua3yh/).
+[ManyBabies1 repository](https://osf.io/re95x/) in ''ManyBabies 1: Stimuli 
+Creation and Norming'' under `OSF Storage`. We selected the 120 utterances
+per speech style based on the list available on 
+[https://osf.io/ua3yh/](https://osf.io/ua3yh/) tabs `AD selected` and
+`ID selected`. The final 240 recordings are available upon request if necessary.
 
 Save the stimuli using a folder structure like the example below.
 
@@ -55,7 +75,7 @@ Save the stimuli using a folder structure like the example below.
 	└── utteranceN.wav
 ```
 
-## Vowel Discrimination
+## Vowel Discrimination data
 The vowel discrimination task utilises three corpora for the vowel 
 contrasts: Hillenbrand's corpus, OLLO corpus and isolated vowel corpus 
 (IVC). 
@@ -71,20 +91,28 @@ In the experiment is used for native vowel contrasts.
 The original dataset can be downloaded from 
 [http://homepages.wmich.edu/~hillenbr/voweldata.html](http://homepages.wmich.edu/~hillenbr/voweldata.html)
 
-For preprocessing you will need meta-data files and wav files.
+For preprocessing you will need meta-data files and wav files. That is:
+- [`iddata.dat.txt`](https://homepages.wmich.edu/~hillenbr/voweldata/iddata.dat)
+- [`timedata.dat.txt`](https://homepages.wmich.edu/~hillenbr/voweldata/timedata.dat)
+- [`men.zip`](https://homepages.wmich.edu/~hillenbr/voweldata/men.zip)
+- [`women.zip`](https://homepages.wmich.edu/~hillenbr/voweldata/women.zip)
+- [`kids.zip`](https://homepages.wmich.edu/~hillenbr/voweldata/kids.zip)
+
+Unzip the files in the same folder.
 
 ### OLLO Corpus
 
 This corpus consists of simple non-sense CVC and VCV contexts spoken by:
-     *  40 German
-     *  10 French
-    Where each logatome is spoken in six different styles:
-     *  Load speaking effort
-     *  Soft speaking effort
-     *  Fast speaking rate
-     *  Slow speaking rate
-     *  Rising pitch (question)
-     *  Normal
+- 40 German
+- 10 French
+
+Where each logatome is spoken in six different styles:
+- Load speaking effort
+- Soft speaking effort
+- Fast speaking rate
+- Slow speaking rate
+- Rising pitch (question)
+- Normal
 
 This corpus was employed for non-native vowel contrasts.
 
@@ -110,9 +138,10 @@ information files can be created. The procedures are similar for both
 experiments. Activate the conda environment before executing python
 scripts.
 
-### IDS Preference
+### IDS Preference data processing
 
-Create input data for models
+Create input data for models. Place yourself in the main folder of the repository before executing the 
+following commands. 
 
 ```
 cd ids_preference
@@ -120,12 +149,18 @@ python trial_processing/create_input_features.py --trials_path path_wav_files_tr
 
 ```
 
-### Vowel Discrimination
+Where `path_wav_files_trials` is the path to the folder containing the  IDS/ADS folders with
+the wav files. Use the same folder structure as described in 
+[IDS Preference data](#ids-preference-data) section.
+
+### Vowel Discrimination data processing
 
 First create corpora information files and then create the input 
 features for models. 
 
 Note: IVC corpus_info.pickle is available in the corpus repository.
+Place yourself in the main folder of the repository before executing the 
+following commands.
 
 ```
 cd vowel_discrimination
@@ -133,10 +168,27 @@ cd vowel_discrimination
 
 #### Hillenbrand's corpus
 
-1. Create corpus_info.pickle file 
+1. Create corpus_info.pickle file. 
 
 ```
 python corpus_processing/preprocess_hillenbrands_corpus.py --corpus_path path_main_folder_corpus --output_path path_corpus_info_file
+```
+
+Where `path_main_folder_corpus` is the path to the main folder of the corpus. 
+This folder should contain the meta-data files and the wav files. The structure
+of the folder should be similar to:
+
+```
+Hillenbrand_vowel_corpus/
+├── iddata.dat.txt
+├── kids
+├── kids.zip
+├── men
+├── men.zip
+├── timedata.dat.txt
+├── women
+└── women.zip
+
 ```
 
 2. Create input features for model
@@ -144,6 +196,7 @@ python corpus_processing/preprocess_hillenbrands_corpus.py --corpus_path path_ma
 ```
 python corpus_processing/create_input_features.py --corpus hc --audio_path path_zip_or_folder_with_audio_files --output_path path_h5py_output_file --corpus_info_path path_to_corpus_info 
 ```
+Where `path_zip_or_folder_with_audio_files` is the path to the zip file or folder with the wav files.
 
 #### OLLO corpus
 
@@ -152,6 +205,16 @@ python corpus_processing/create_input_features.py --corpus hc --audio_path path_
 ```
 python corpus_processing/preprocess_ollo_corpus.py -corpus_path path_main_folder_corpus --audios_zip_path path_zip_with_trials --output_path path_corpus_info_file
 ```
+Where `path_main_folder_corpus` is the path to the main folder of the corpus, and
+`audios_zip_path` is the path to the zip file with the audio files. The structure of
+the main folder should be similar to:
+
+```
+OLLO/
+├── OLLO2.0_LABELS.ZIP
+├── OLLO2.0_NO.ZIP
+└── OLLO2.0_README.ZIP
+```
 
 2. Create input features for model
 
@@ -159,12 +222,16 @@ python corpus_processing/preprocess_ollo_corpus.py -corpus_path path_main_folder
 python corpus_processing/create_input_features.py --corpus oc --audio_path path_zip_or_folder_with_audio_files --output_path path_h5py_output_file --corpus_info_path path_to_corpus_info 
 ```
 
+Where `audio_path` is the path to the zip file `OLLO2.0_NO.ZIP` with the wav files.
+
 #### IVC corpus
 1. Create input features for model
 
 ```
 python corpus_processing/create_input_features.py --corpus ivc --audio_path path_zip_or_folder_with_audio_files --output_path path_h5py_output_file
 ```
+
+Where `path_main_folder_corpus` is the path to the folder with wav files of the Isolated Vowels Corpus.
 
 # Models
 We trained Autoregressive Predictive Coding (APC) and Contrastive
@@ -181,10 +248,11 @@ For the vowel discrimination test, you will need to calculate the
 encoded stimulus representations before calculating the distance between
 any pair of trials.
 
-To obtain the prediction files execute:
+To obtain the prediction files execute. Place yourself in the main folder of the repository before executing the 
+following commands:
 
 ```
-cd vowel_discrimiantion
+cd vowel_discrimination
 python pc_predictions_calculation/calculate_pc_predictions.py --input_features_path path_input_features_file --output_path path_h5py_predictions_file --model_path path_pc_model_file --pc_model [apc|cpc]
 ```
 
@@ -197,7 +265,8 @@ according to each test.
 ### IDS Preference
 By executing the next command you will get the csv files with the 
 attentional preference score per frame and trials that will later be
-use to calculate the effect size.
+used to calculate the effect size. Place yourself in the main folder 
+of the repository before executing the following commands.
 
 ```
 cd ids_preference
@@ -213,6 +282,8 @@ corpus information file and details of output file paths, and type
 of test (basic or basic_non_native). Please follow the example file 
 `vowel_discrimination/evaluation_protocol/tests_setups/default_configuration.json`.
 
+Place yourself in the main folder of the repository before executing the 
+following commands.
 
 ```
 cd vowel_discrimination
@@ -231,8 +302,8 @@ csv files previously generate in that folder.
 
 You are ready to run the scripts to obtain the effect sizes and plots
 as in the manuscript. For the IDS preference test: 
-`r_scripts/ids_preference/obtain_effect_sizes.R`and for the vowel
-discrimination test: `r_scripts/vowel_discrimination/obtain_effect_sizes.R`
+`r_scripts/ids_preference/obtain_dev_trajectories.R`and for the vowel
+discrimination test: `r_scripts/vowel_discrimination/obtain_dev_trajectories.R`
 
 # References
 

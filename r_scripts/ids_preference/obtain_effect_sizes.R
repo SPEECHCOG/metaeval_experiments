@@ -1,6 +1,6 @@
 # IDS preference test
 # Calculation of effect size based on attentional preference scores 
-# from APC and CPC models. 
+# from APC models.
 
 library(tidyverse)
 library(ggplot2)
@@ -53,7 +53,5 @@ calculate_standardised_mean_gain <- function(score_file_path){
   return(list('d'=d, 't'= t_test$statistic, 'p-value'=t_test$p.value, 
               'ci_lb'=ci_lb, 'ci_ub'=ci_ub))
 }
-
-
 
 

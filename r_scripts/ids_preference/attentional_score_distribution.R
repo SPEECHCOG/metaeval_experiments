@@ -1,4 +1,4 @@
-# Analysis of attentional scores distribution for APC and CPC models. 
+# Analysis of attentional scores distribution for APC model.
 # This script also includes sanity checks for the computational test
 
 ## Loading data
@@ -7,10 +7,7 @@ library(ggplot2)
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-apc_at <- read.csv("Model_Results/apc_attentional_preference_scores.csv", sep = ';')
-apc_at_untrained <- read.csv("Model_Results/apc_untrained_attentional_preference_scores.csv", sep = ';')
-cpc_at <- read.csv("Model_Results/cpc_attentional_preference_scores.csv", sep = ';')
-cpc_at_untrained <- read.csv("Model_Results/cpc_untrained_attentional_preference_scores.csv", sep = ';')
+apc_at_untrained <- read.csv("test_results_large_apc/apc/0/ids/attentional_preference_scores.csv", sep = ';')
 
 transform_dv <- function(data){
   new_data = data %>% mutate(attentional_preference_score = log(data$attentional_preference_score))
@@ -45,15 +42,8 @@ create_density_plots <- function(attentional_scores, model){
   print(c)
 }
 
-create_density_plots(apc_at, 'APC')
 create_density_plots(apc_at_untrained, 'Untrained APC')
-create_density_plots(cpc_at, 'CPC')
-create_density_plots(cpc_at_untrained, 'Untrained CPC')
-
-create_density_plots(transform_dv(apc_at), 'APC (log)')
 create_density_plots(transform_dv(apc_at_untrained), 'Untrained APC (log)')
-create_density_plots(transform_dv(cpc_at), 'CPC (log)')
-create_density_plots(transform_dv(cpc_at_untrained), 'Untrained CPC (log)')
 
 
 # Check for normality (https://www.sheffield.ac.uk/polopoly_fs/1.885202!/file/95_Normality_Check.pdf)
@@ -76,48 +66,10 @@ check_normality <- function(data, title){
   print(shapiro.test(ids_data[1:5000]))
 }
 
-check_normality(apc_at, 'APC')
 check_normality(apc_at_untrained, 'Untrained APC')
-check_normality(cpc_at, 'CPC')
-check_normality(cpc_at_untrained, 'Untrained CPC')
 
 # Test with log(attentional_score)
-check_normality(transform_dv(apc_at), 'APC (log)')
 check_normality(transform_dv(apc_at_untrained), 'Untrained APC (log)')
-check_normality(transform_dv(cpc_at), 'CPC (log)')
-check_normality(transform_dv(cpc_at_untrained), 'Untrained CPC (log)')
-
-
-# Test effect of randomness (negative sampling) in InfoNCE per frame distribution
-
-infonce_data <- data_frame()
-for (i in 1:10){
-  temp_data <- read.csv(paste("Model_Results/cpc_untrained_attentional_preference_scores_",i,".csv", sep=""), sep = ';')
-  temp_data$execution <- as.character(i)
-  infonce_data <- rbind(infonce_data, temp_data)
-}
-
-ggplot(infonce_data, aes(x=attentional_preference_score, fill=execution)) + 
-  geom_density(aes(group=execution), alpha=0.25) +
-  geom_vline(aes(xintercept = mean(attentional_preference_score)), 
-             linetype = "dashed", size = 0.6) + 
-  ggtitle('CPC untrained') +
-  facet_grid(trial_type~., scales= 'free', space='free')
-
-# distribution of the mean per trial in all execution
-attentional_score_mean <- infonce_data %>%
-  group_by(execution, trial_type, file_name) %>%
-  summarise(att_mean = mean(attentional_preference_score, na.rm = TRUE))
-
-ggplot(attentional_score_mean, aes(x=att_mean, fill=as.character(file_name))) +
-  geom_density(aes(group=file_name), alpha=0.25) +
-  ggtitle('Attentional preference score mean') +
-  facet_grid(trial_type~., scales= 'free', space='free')
-
-ggplot(attentional_score_mean, aes(x=att_mean, fill=trial_type)) +
-  geom_density(aes(group=trial_type), alpha=0.25) +
-  ggtitle('Attentional preference score mean') 
-
 
 # Sanity check of computational test
 # We expect to have a null effect if the attentional preference scores comes
@@ -153,8 +105,8 @@ calculate_standardised_mean_gain <- function(measurements){
 }
 
 simulation <- function(){
-  random_at <- read.csv("Model_Results/apc_attentional_preference_scores.csv", sep = ';')
-  two_dist_at <- read.csv("Model_Results/apc_attentional_preference_scores.csv", sep = ';')
+  random_at <- read.csv("test_results_large_apc/apc/0/ids/attentional_preference_scores.csv", sep = ';')
+  two_dist_at <- read.csv("test_results_large_apc/apc/0/ids/attentional_preference_scores.csv", sep = ';')
   file_names <- unique(random_at$file_name)
   
   

@@ -59,7 +59,7 @@ obtain_vowel_effects_for_all_epochs <- function(folder, model, contrasts_type, e
     es_contrasts_c$corpus <- 'natural'
     es_contrasts_ivc$corpus <- 'synthetic'
     es_all_contrasts <- rbind(es_contrasts_c, es_contrasts_ivc)
-    write.csv(es_all_contrasts, paste("./",model,"_vowel_results/", model, "_", contrasts_type, "_", as.character(epoch), ".csv", sep=""))
+    write.csv(es_all_contrasts, paste("./","apc_large_vowel_results/", model, "_", contrasts_type, "_", as.character(epoch), ".csv", sep=""))
     
     es_epoch <- calculate_mean_effect(es_all_contrasts, es, alpha)
     es_epochs <- append(es_epochs, list(es_epoch))
@@ -119,8 +119,8 @@ get_vowel_disc_effects_dataframe <- function(folder, model, contrasts_type, es, 
     significant <- c(significant, effects_list[[epoch]]$significant)
   }
   
-  age <- c(0:(batch_steps-1))* batch_age
-  age <- c(age, c(1:epoch_steps)* epoch_age) 
+  age <- c(0:(batch_steps-1))* batch_age # days represented by 10 hours of speech
+  age <- c(age, c(1:epoch_steps)* epoch_age) # total days represented by 100 hours of speech
   
   checkpoint <- rep("batch", batch_steps-1)
   checkpoint <- c("epoch", checkpoint, rep("epoch",epoch_steps))
@@ -137,15 +137,13 @@ get_vowel_disc_effects_dataframe <- function(folder, model, contrasts_type, es, 
 plot_developmental_trajectories <- function(folder, model, contrast_type, es, alpha, batch_age, epoch_age) {
   model_effects <- get_vowel_disc_effects_dataframe(folder, model, contrast_type, es, alpha, batch_age, epoch_age)
   model_effects <- model_effects %>% filter(checkpoint!='batch')
-  
+
   vowel_mo = 30.42
   if(contrast_type=="native"){
     inf_data = nat_vowels_mod
     mean_es = mean_es_nat 
     lb_es = mean_es_nat_ci.lb 
     ub_es = mean_es_nat_ci.ub
-    lb_y =  -1.5
-    ub_y = 2.5
     min_age = 3/vowel_mo
     max_age = 445/vowel_mo
   }else{
@@ -153,12 +151,13 @@ plot_developmental_trajectories <- function(folder, model, contrast_type, es, al
     mean_es = mean_es_nonnat
     lb_es = mean_es_nonnat_ci.lb 
     ub_es = mean_es_nonnat_ci.ub
-    lb_y =  -1 
-    ub_y = 3.2
     min_age = 106/vowel_mo
     max_age = 411/vowel_mo
   }
   
+  lb_y = -1.5
+  ub_y = 3.2
+
   inf_data <- inf_data %>% mutate(mean_age_1 = mean_age_1 /vowel_mo)
   
   p <- inf_data %>%
@@ -205,8 +204,7 @@ plot_developmental_trajectories <- function(folder, model, contrast_type, es, al
     ) + 
     theme(legend.position =  c(0.85,0.9), 
                  text = element_text(size=20), 
-                 axis.line = element_line(color='black', size=1)) 
-  
+                 axis.line = element_line(color='black', size=1))
   p
   
 }
@@ -223,3 +221,11 @@ apc_large_results_nonnat['capability'] = 'Vowel discr. (non-native)'
 apc_large_results = rbind(apc_large_results_nat, apc_large_results_nonnat)
 write_csv(apc_large_results, 'apc_large_results_vowel_discr.csv')
 
+## Results for MFCCs
+es_hc <- calculate_standardised_mean_gain_per_contrast('./test_results_large_apc/mfcc/dtw_distances_hc_native_mfcc.csv')
+es_ivc_nat <- calculate_standardised_mean_gain_per_contrast('./test_results_large_apc/mfcc/dtw_distances_ivc_native_mfcc.csv')
+mean_es_native <- calculate_mean_effect(rbind(es_hc,es_ivc_nat), 'g', 0.05)
+
+es_oc <- calculate_standardised_mean_gain_per_contrast('./test_results_large_apc/mfcc/dtw_distances_oc_non_native_mfcc.csv')
+es_ivc_nonnat <- calculate_standardised_mean_gain_per_contrast('./test_results_large_apc/mfcc/dtw_distances_ivc_non_native_mfcc.csv')
+mean_es_nonnative <- calculate_mean_effect(rbind(es_oc,es_ivc_nonnat), 'g', 0.05)

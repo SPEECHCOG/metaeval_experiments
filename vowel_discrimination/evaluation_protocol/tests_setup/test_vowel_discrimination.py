@@ -20,14 +20,14 @@ from evaluation_protocol.io_module.read_predictions_and_features import read_inp
 from evaluation_protocol.tests_setup.calculate_dtw_distances import calculate_dtw_distances
 from evaluation_protocol.tests_setup.calculate_meta_analysis_statistics import get_meta_analysis_statistics
 
-BASIC_OC_CONTRASTS = [('a', 'a:'), ('E', 'I'), ('i', 'I')]
+BASIC_OC_CONTRASTS = [('a', 'a:')]
 BASIC_HC_CONTRASTS = [('A', 'i'), ('i', 'I'), ('A', 'E'), ('e', 'E'), ('A', '{')]
 BASIC_IVC_CONTRASTS = [('A', 'i'), ('i', 'I'), ('A', 'E'), ('A', '{')]
-BASIC_IVC_NON_NATIVE_CONTRASTS = [('a', 'a~'), ('a:', 'a'), ('E', 'I'), ('u:', 'y:')]
-BASIC_OC_CONTRASTS_LANGUAGES = [('de', 'de')] * 3
+BASIC_IVC_NON_NATIVE_CONTRASTS = [('a', 'a~'), ('a:', 'a'), ('u:', 'y:')]
+BASIC_OC_CONTRASTS_LANGUAGES = [('de', 'de')]
 BASIC_HC_CONTRASTS_LANGUAGES = [('en', 'en')] * 5
 BASIC_IVC_CONTRASTS_LANGUAGES = [('en', 'en')] * 4
-BASIC_IVC_NON_NATIVE_CONTRASTS_LANGUAGES = [('fr', 'fr'), ('jp', 'jp'), ('nl', 'nl'), ('de', 'de')]
+BASIC_IVC_NON_NATIVE_CONTRASTS_LANGUAGES = [('fr', 'fr'), ('jp', 'jp'), ('de', 'de')]
 BASIC_FILTERS = {'repetitions': ['N1'], 'failed_listeners_test': False}
 
 

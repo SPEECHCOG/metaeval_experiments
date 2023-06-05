@@ -322,6 +322,12 @@ Human phoneme recognition depending on speech-intrinsic variability.
 J Acoust Soc Am. 2010 Nov;128(5):3126-41. doi: 10.1121/1.3493450. 
 PMID: 21110608.
 
+# Citing this work
+
+María Andrea Cruz Blandón, Alejandrina Cristia, Okko Räsänen. (2023). 
+Introducing meta-analysis in the evaluation of computational models of infant 
+language development. Accepted for publication in Cognitive Science Journal
+
 # Contact 
 If you find any issue please report it on the 
 [issues section](https://github.com/SPEECHCOG/metaeval_experiments/issues) 

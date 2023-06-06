@@ -32,7 +32,7 @@ conda env create -f requirements.yml
 use `requirements_across_platforms.yml` if you find problems with 
 `requirements.yml`
 
-Then you can activate the conda environment for excuting the code
+Then you can activate the conda environment for executing the code
 
 ```
 conda activate metaeval_env

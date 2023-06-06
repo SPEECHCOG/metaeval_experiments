@@ -14,7 +14,8 @@ effect sizes](#obtain-effect-sizes) sections.
 
 For replication from the precomputed results, you can directly follow the 
 instructions in [Obtain effect sizes](#obtain-effect-sizes). This will 
-reproduce figures 5.a, 5.b and 5.c in the manuscript.
+reproduce figures 5.a, 5.b and 5.c in the manuscript. For replicating figure
+6 you can follow the instructions in [Obtain summary results](#obtain-summary-results).
 
 # Requirements
 
@@ -305,7 +306,21 @@ as in the manuscript. For the IDS preference test:
 `r_scripts/ids_preference/obtain_dev_trajectories.R`and for the vowel
 discrimination test: `r_scripts/vowel_discrimination/obtain_dev_trajectories.R`
 
-# References
+
+## Obtain summary results
+For this step you will need first to run the R script `summary_results/get_summary_tables.R`
+this will generate three csv files: `summary_results/summary_table_es.csv` with the effect sizes
+obtained from the meta-analysis, `summary_results/summary_table_lb.csv` with the lower bound of 
+the effect sizes and `summary_results/apc_results.csv` with the results of the APC model. 
+
+Then you can run the python script `summary_results/get_overall_table.py` to obtain the figure comparing
+model and infant data within an unique table.
+
+```python
+python summary_results/get_overall_table.py
+```
+
+## References
 
 The ManyBabies Consortium. (2020). Quantifying sources of variability 
 in infancy research using the infant-directed speech preference. 
@@ -322,13 +337,13 @@ Human phoneme recognition depending on speech-intrinsic variability.
 J Acoust Soc Am. 2010 Nov;128(5):3126-41. doi: 10.1121/1.3493450. 
 PMID: 21110608.
 
-# Citing this work
+## Citing this work
 
 María Andrea Cruz Blandón, Alejandrina Cristia, Okko Räsänen. (2023). 
 Introducing meta-analysis in the evaluation of computational models of infant 
 language development. Accepted for publication in Cognitive Science Journal
 
-# Contact 
+## Contact 
 If you find any issue please report it on the 
 [issues section](https://github.com/SPEECHCOG/metaeval_experiments/issues) 
 in this repository. Further comments can be sent to 

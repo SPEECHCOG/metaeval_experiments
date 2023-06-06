@@ -1,0 +1,91 @@
+age,d,significant,checkpoint,capability
+0,-0.2956146822491837,TRUE,epoch,IDS Preference
+0.06,-0.04702957965824266,FALSE,batch,IDS Preference
+0.12,-0.3961451521982659,TRUE,batch,IDS Preference
+0.18,-0.3858976695314853,TRUE,batch,IDS Preference
+0.24,-0.37298043618213944,TRUE,batch,IDS Preference
+0.3,-0.42309256204337664,TRUE,batch,IDS Preference
+0.36,-0.47102529162149254,TRUE,batch,IDS Preference
+0.42,-0.5526858488753065,TRUE,batch,IDS Preference
+0.48,-0.6724053353868973,TRUE,batch,IDS Preference
+0.54,-0.797739511271663,TRUE,batch,IDS Preference
+0.6,-0.8932125291822365,TRUE,batch,IDS Preference
+0.6599999999999999,-0.8715729323128661,TRUE,batch,IDS Preference
+0.57,-0.8740934647784423,TRUE,epoch,IDS Preference
+1.14,-0.7058568651336863,TRUE,epoch,IDS Preference
+1.71,-0.6250049138213893,TRUE,epoch,IDS Preference
+2.28,-0.5679111779767639,TRUE,epoch,IDS Preference
+2.8499999999999996,-0.5622546670544265,TRUE,epoch,IDS Preference
+3.42,-0.45296651433777035,TRUE,epoch,IDS Preference
+3.9899999999999998,-0.4907466496854185,TRUE,epoch,IDS Preference
+4.56,-0.4788564155183571,TRUE,epoch,IDS Preference
+5.13,-0.2926886823081009,TRUE,epoch,IDS Preference
+5.699999999999999,-0.25484915960502935,TRUE,epoch,IDS Preference
+6.27,-0.22509804491695107,FALSE,epoch,IDS Preference
+6.84,-0.2986982491474013,TRUE,epoch,IDS Preference
+7.409999999999999,-0.23094897924168103,FALSE,epoch,IDS Preference
+7.9799999999999995,-0.16027572893313596,FALSE,epoch,IDS Preference
+8.549999999999999,-0.095459021490827,FALSE,epoch,IDS Preference
+9.12,-0.0873163411961017,FALSE,epoch,IDS Preference
+9.69,-0.046680787522144405,FALSE,epoch,IDS Preference
+10.26,-0.005880487598566314,FALSE,epoch,IDS Preference
+0,2.0569494020465218,TRUE,epoch,Vowel discr. (native)
+0.06,1.2378161388926334,TRUE,batch,Vowel discr. (native)
+0.12,0.3005373522603489,TRUE,batch,Vowel discr. (native)
+0.18,0.26365570959027473,TRUE,batch,Vowel discr. (native)
+0.24,0.7128105924301323,TRUE,batch,Vowel discr. (native)
+0.3,1.4993338339880664,TRUE,batch,Vowel discr. (native)
+0.36,2.033665700224247,TRUE,batch,Vowel discr. (native)
+0.42,1.9099570419384044,TRUE,batch,Vowel discr. (native)
+0.48,1.8245919031068212,TRUE,batch,Vowel discr. (native)
+0.54,1.7038406749823838,TRUE,batch,Vowel discr. (native)
+0.6,1.63556849165081,TRUE,batch,Vowel discr. (native)
+0.6599999999999999,1.582813179914398,TRUE,batch,Vowel discr. (native)
+0.57,1.5969975620308645,TRUE,epoch,Vowel discr. (native)
+1.14,1.2675000374700685,TRUE,epoch,Vowel discr. (native)
+1.71,1.2402275785709254,TRUE,epoch,Vowel discr. (native)
+2.28,1.1960241447880036,TRUE,epoch,Vowel discr. (native)
+2.8499999999999996,1.1965560973260203,TRUE,epoch,Vowel discr. (native)
+3.42,1.1911777232723355,TRUE,epoch,Vowel discr. (native)
+3.9899999999999998,1.1913975773052081,TRUE,epoch,Vowel discr. (native)
+4.56,1.2366677404039268,TRUE,epoch,Vowel discr. (native)
+5.13,1.2287069467318255,TRUE,epoch,Vowel discr. (native)
+5.699999999999999,1.2159710294896149,TRUE,epoch,Vowel discr. (native)
+6.27,1.2157199584955456,TRUE,epoch,Vowel discr. (native)
+6.84,1.2402700813722463,TRUE,epoch,Vowel discr. (native)
+7.409999999999999,1.2328955766821035,TRUE,epoch,Vowel discr. (native)
+7.9799999999999995,1.2327803345933583,TRUE,epoch,Vowel discr. (native)
+8.549999999999999,1.2201607368363299,TRUE,epoch,Vowel discr. (native)
+9.12,1.2531876285821482,TRUE,epoch,Vowel discr. (native)
+9.69,1.2469176142078267,TRUE,epoch,Vowel discr. (native)
+10.26,1.2703394338148135,TRUE,epoch,Vowel discr. (native)
+0,0.10096090912966149,TRUE,epoch,Vowel discr. (non-native)
+0.06,0.09715216395885344,TRUE,batch,Vowel discr. (non-native)
+0.12,0.009322603539089536,FALSE,batch,Vowel discr. (non-native)
+0.18,0.009108123785927978,FALSE,batch,Vowel discr. (non-native)
+0.24,0.025259911368575954,TRUE,batch,Vowel discr. (non-native)
+0.3,0.08572262757578626,TRUE,batch,Vowel discr. (non-native)
+0.36,0.0681736483705284,TRUE,batch,Vowel discr. (non-native)
+0.42,0.061204368858150275,TRUE,batch,Vowel discr. (non-native)
+0.48,0.06478357159276094,TRUE,batch,Vowel discr. (non-native)
+0.54,0.06307786161420456,TRUE,batch,Vowel discr. (non-native)
+0.6,0.062358844310041794,TRUE,batch,Vowel discr. (non-native)
+0.6599999999999999,0.07379817216916595,TRUE,batch,Vowel discr. (non-native)
+0.57,0.0723084441250112,TRUE,epoch,Vowel discr. (non-native)
+1.14,0.0882570719254904,TRUE,epoch,Vowel discr. (non-native)
+1.71,0.09641851186352464,TRUE,epoch,Vowel discr. (non-native)
+2.28,0.09643646598383276,TRUE,epoch,Vowel discr. (non-native)
+2.8499999999999996,0.09662008360349651,TRUE,epoch,Vowel discr. (non-native)
+3.42,0.09727517668713138,TRUE,epoch,Vowel discr. (non-native)
+3.9899999999999998,0.09468094598038426,TRUE,epoch,Vowel discr. (non-native)
+4.56,0.09715641511901081,TRUE,epoch,Vowel discr. (non-native)
+5.13,0.09836720514151467,TRUE,epoch,Vowel discr. (non-native)
+5.699999999999999,0.0979350288427742,TRUE,epoch,Vowel discr. (non-native)
+6.27,0.09558284922450654,TRUE,epoch,Vowel discr. (non-native)
+6.84,0.09428360028383602,TRUE,epoch,Vowel discr. (non-native)
+7.409999999999999,0.09485430408069795,TRUE,epoch,Vowel discr. (non-native)
+7.9799999999999995,0.09885185739010868,TRUE,epoch,Vowel discr. (non-native)
+8.549999999999999,0.09404556018322806,TRUE,epoch,Vowel discr. (non-native)
+9.12,0.09616536570276238,TRUE,epoch,Vowel discr. (non-native)
+9.69,0.09784121385800988,TRUE,epoch,Vowel discr. (non-native)
+10.26,0.10180774805023093,TRUE,epoch,Vowel discr. (non-native)
